@@ -17,7 +17,13 @@
       <div class="product-display">
         <div class="product-container">
           <div class="product-image">
-            <img v-bind:src="image">
+            <img 
+              v-bind:src="image"
+              :class="[instock ? '' : 'out-of-stock-img']">
+            <!-- ^[Vue warn]: Property "instock" was accessed during render but is not defined on instance. 
+  at <App> -->
+              <!-- :class="{ 'out-of-stock-img' : !inStock }"> -->
+              
           </div>
           <div class="product-info">
             <h1>{{ product }}</h1>
@@ -26,8 +32,26 @@
             <ul>
               <li v-for="detail in details">{{ detail }}</li>
             </ul>
-            <div v-for="variant in variants" :key="variant.id" @mouseOver="updateImage(variant.image)">{{ variant.color }}</div>
-            <button class="button" v-on:click="addToCart">Add to Cart</button>
+            <div 
+              v-for="variant in variants" 
+              :key="variant.id" 
+              @mouseOver="updateImage(variant.image)">
+              {{ variant.color }}
+            </div>
+            <div 
+              v-for="variant in variants" 
+              :key="variant.id" 
+              @mouseover="updateImage(variant.image)" 
+              class="color-circle" 
+              :style="{ backgroundColor: variant.color }">
+            </div>
+            <button 
+              class="button"
+              :class="{ disabledButton: !inStock }"
+              :disabled ="!inStock" 
+              v-on:click="addToCart">
+              Add to Cart
+            </button>
             <button class="button" @click="removeFromCart">Remove Item</button>
 
           </div>
